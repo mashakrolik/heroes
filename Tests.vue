@@ -41,7 +41,7 @@
          percentCorrect: 0,
          questionsLenght: 0,
          tests: [],
-         counter: 0,
+         result: 0,
       },
       mounted() {
          // https://api.myjson.com/bins/sbev0
@@ -53,7 +53,7 @@
       methods: {
          getCorrect(e) {
            if(e.currentTarget.getAttribute('data-correct')) {
-             this.counter += 1;
+             this.result += 1;
              let list = e.target.parentElement.parentElement.getElementsByTagName("input");
              for (var i = 0; i < list.length; i++) {
              list[i].disabled = true;
@@ -73,11 +73,11 @@
            this.questionsLenght = answers.length
          },
          getResult() {
-           if(this.counter == 0) {
+           if(this.result == 0) {
              this.percentCorrect == 0;
              this.showResult = true
            } else {
-             this.percentCorrect = (100 / this.questionsLenght) * this.counter
+             this.percentCorrect = (100 / this.questionsLenght) * this.result
              this.showResult = true
            }
           }
