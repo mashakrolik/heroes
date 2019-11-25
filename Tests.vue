@@ -1,5 +1,6 @@
 <template>
-  <div class="container mx-auto" id="app">
+<div class="container mx-auto" id="app">
+  <div class="w-41 md:w-41 lg:w-41">
     <div v-for="test in tests">
         <div v-for="tests in test.tests">
             Ид теста: {{ tests.test_id }}
@@ -18,6 +19,7 @@
         </div>
     </div>
   </div>
+</div>
 </template>
 
 
@@ -90,7 +92,67 @@
 
 
 
-
+<script>
+      data: function () {
+            return {
+          showResult: false,
+          percentCorrect: 0,
+          questionsLenght: 0,
+          tests: [],
+          counter: 0,
+          }
+        },
+        mounted() {
+          // https://api.myjson.com/bins/sbev0
+            axios.get("https://api.myjson.com/bins/d7414")
+              .then(response => {
+                this.tests = response.data
+              })
+        },
+        methods: {
+          getCorrect(e) {
+            
+            console.log(this.questionsLenght)
+            console.log(e.currentTarget)
+            if(e.currentTarget.getAttribute('data-correct')) {
+              
+              this.counter += 1;
+              let list = e.target.parentElement.parentElement.getElementsByTagName("input");
+              for (var i = 0; i < list.length; i++) {
+              list[i].disabled = true;
+          }
+              // e.target.parentElement.parentElement.hidden = true
+              // e.currentTarget.hidden = false
+              e.target.classList.add('correct');
+            } else if (!e.currentTarget.getAttribute('data-correct')) {
+              e.target.classList.add('wrong');
+              let list = e.target.parentElement.parentElement.getElementsByTagName("input");
+              for (var i = 0; i < list.length; i++) {
+              list[i].disabled = true;
+          }
+          // e.target.parentElement.parentElement.hidden = true
+            } else {
+              e.currentTarget.classList.add('wrong');
+            }
+          },
+          setResult(answers) {
+            this.questionsLenght = answers.length
+            console.log(this.questionsLenght)
+          },
+          getResult() {
+            if(this.counter == 0) {
+              this.percentCorrect == 0;
+              this.showResult = true
+            } else {
+              this.percentCorrect = Math.round((100 / this.questionsLenght) * this.counter)
+              this.percentCorrect
+              this.showResult = true
+            }
+  
+          }
+        }
+      });    
+    </script>
 
 
 
